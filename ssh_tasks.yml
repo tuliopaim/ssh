@@ -1,0 +1,30 @@
+---
+- name: Setup SSH keys
+  block:
+    - name: Ensure the SSH folder exists
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.ssh/"
+        state: directory
+
+    - name: Decrypt github SSH key
+      ansible.builtin.include_vars:
+        file: ssh/id_tuliopaim_github.yml
+        name: ssh_key_vars
+
+    - name: Copy decrypted github SSH key to ~/.ssh/
+      ansible.builtin.copy:
+        content: "{{ ssh_key_vars.ssh_private_key }}"
+        dest: "{{ ansible_user_dir }}/.ssh/id_tuliopaim_github"
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
+        mode: '0600'
+
+    - name: Copy public github SSH key 
+      ansible.builtin.copy:
+        content: "{{ ansible_user_dir }}/.dotfiles/ssh/id_tuliopaim_github.pub"
+        dest: "{{ ansible_user_dir }}/.ssh/id_tuliopaim_github.pub"
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
+        mode: '0600'
+  tags: ssh
+
