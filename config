@@ -1,0 +1,13 @@
+# Personal GitHub account
+Host personal
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_personal_gh
+
+
+# TB GitHub account
+Host tb
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_tb_gh
+
