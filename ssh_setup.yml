@@ -40,4 +40,22 @@
         group: "{{ ansible_user_id }}"
         mode: 0600
 
+    - name: Eval the ssh-agent
+      shell: |
+        eval $(ssh-agent -s)
+        ssh-add {{ ansible_user_dir }}/.ssh/{{ personal_private }}
 
+    - name: Check if ~/.dotfiles exists
+      stat:
+        path: ~/.dotfiles
+      register: dotfiles
+
+    - name: Clone dotfiles repo
+      git:
+        repo: 'https://github.com/tuliopaim/dotfiles-wsl'
+        dest: '~/.dotfiles/'
+      when: not dotfiles.stat.exists
+
+    - name: Setup dotfiles
+      include_tasks: ~/.dotfiles/dev_env_tasks.yml
+      when: not dotfiles.stat.exists
