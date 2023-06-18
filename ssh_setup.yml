@@ -1,12 +1,14 @@
 ---
 - name: Setup SSH keys
+  hosts: localhost
+  gather_facts: yes
   vars:
     personal_private: 'id_personal_gh'
     personal_public: 'id_personal_gh.pub'
     tb_private: 'id_tb_gh'
     tb_public: 'id_tb_gh.pub'
 
-  block:
+  tasks:
     - name: Ensure the SSH folder exists
       become: yes
       ansible.builtin.file:
